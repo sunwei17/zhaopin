@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse
 from django.shortcuts import render
-
+from django.core.paginator import Paginator
 # Create your views here.
 from . models import listtwot
 def get(request):
@@ -29,4 +29,7 @@ def getList(request):
     else:
         cc = listtwot.objects.filter()
     #cc = listtwot.objects.filter()
-    return render(request, 'zhilian/list.html',{'citydetail_list':cc,'jobtype':jobtype})
+    paginator = Paginator(cc, 2)
+    pindex = request.GET['page']
+    page = paginator.page(int(pindex))
+    return render(request, 'zhilian/list.html',{'citydetail_list':page,'cityname':cityname,'jobtype':jobtype,'page':page, 'paginator':paginator,})
